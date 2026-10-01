@@ -152,7 +152,12 @@ var defaultOrigins = new[]
     "http://127.0.0.1:4200",
     "http://localhost:3000"
 };
-var allowedOrigins = defaultOrigins.Union(configuredOrigins).Where(o => !string.IsNullOrWhiteSpace(o)).ToArray();
+var allowedOrigins = defaultOrigins
+    .Union(configuredOrigins)
+    .Where(o => !string.IsNullOrWhiteSpace(o))
+    .Select(o => o.TrimEnd('/'))
+    .Distinct()
+    .ToArray();
 
 builder.Services.AddCors(options =>
 {
